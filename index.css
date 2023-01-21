@@ -13,3 +13,11 @@ h1 {
     font-family: cursive;
     color: green;
 }
+
+button {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+h5 {
+    font-style: oblique;
+}
