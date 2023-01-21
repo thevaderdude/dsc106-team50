@@ -3,7 +3,13 @@
 }
 
 .margin {
+    background-color: red;
     display: flex;
     justify-content: center;
     padding-top: 30px;
+}
+
+h1 {
+    font-family: cursive;
+    color: green;
 }
