@@ -9,6 +9,30 @@
     padding-top: 30px;
 }
 
+@keyframes dave {
+    0%   {background-color:red; left:0px; top:0px;}
+    25%  {background-color:orange; left:200px; top:0px;}
+    50%  {background-color:yellow; left:200px; top:200px;}
+    75%  {background-color:green; left:0px; top:200px;}
+    100% {background-color:blue; left:0px; top:0px;}
+  }
+
+.Dave {
+text-align: center;
+padding: 25px 25px;
+width: 90px;
+height: 90px;
+border: 1px solid black;
+border-radius: 45px;
+position: relative;
+background-color: red;
+animation-name: dave;
+animation-duration: 4s;
+animation-iteration-count: infinite;
+animation-timing-function: ease;
+animation-direction: alternate;
+  }
+
 h1 {
     font-family: cursive;
     color: green;
