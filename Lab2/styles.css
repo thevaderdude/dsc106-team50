@@ -2,6 +2,12 @@ svg {
     background-color: #87CEEB;
 }
 
+circle {
+    fill: yellow;
+    stroke: black;
+    stroke-width: 1px;
+}
+
 #pyramids {
     fill: #A52A2A;
 }
