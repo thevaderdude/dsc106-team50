@@ -8,6 +8,20 @@ circle {
     stroke-width: 1px;
 }
 
+textPath{
+    font-size: small;
+}
+
+text {
+    transform: translate(0px, -10px);
+}
+
+path {
+    stroke: black;
+    fill: none;
+    transform: translate(600px, 10px) rotate(15deg);
+}
+
 #pyramids {
     fill: #A52A2A;
 }
