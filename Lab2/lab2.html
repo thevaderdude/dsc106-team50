@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css" />
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Lab2 activity</title>
+</head>
+<body>
+    <p id="name"> </p>
+    <p id="age"> </p>
+    <p id="hobbies"> </p>
+	<script type="text/javascript">
+
+        const student = { 
+            name: 'John',
+            age: 20,
+            hobbies: ['reading', 'games', 'coding', 'singing'],
+        };
+
+        //Your code here
+        for (let a in student) {
+            t = a + ' - '
+            if (a == 'hobbies') {
+                t += JSON.stringify(student[a])
+            } else {
+                t += student[a]
+            }
+            console.log(t)
+            document.getElementById(a).innerHTML = t;
+
+        }
+	</script>
+    <!-- Your Scenery code here -->
+	
+
+
+</body>
+</html>
