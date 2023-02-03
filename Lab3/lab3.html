@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <script>        
+        //Define your rowConverter function
+        var rowConverter = function(d){
+           return {
+            Name: d.Name,
+            Manufacturer: d.Manufacturer,
+            Calories: parseInt(d.Calories),
+            Carbo: parseFloat(d.Carbo),
+            Year: parseInt(d.Year)
+           }
+        }
+
+        //load csv here with callback
+        d3.csv('cereal.csv', rowConverter).then(function(data){
+            console.log(data)
+        });
+        
+        //Group the cereals by manufacturers
+        
+        //Get the sum of carbo per manufacturer per year
+        
+        // Find the sum of calories for manufacturer “K” in 2020? 
+        
+    </script>
+</body>
+</html>
