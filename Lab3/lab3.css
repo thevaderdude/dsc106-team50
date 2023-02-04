@@ -1,0 +1,38 @@
+table{
+    border-collapse: collapse;
+    border: 1px solid;
+    margin: 25px 0;
+    font-size: 0.9em;
+    font-family: sans-serif;
+    min-width: 400px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.cmy{
+    min-width: 400px;
+}
+
+
+th, td {
+    padding: 15px;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background-color: lightskyblue;
+}
+
+th{
+    background-color: navy;
+    color:white
+}
+
+p{
+    font-size: 0.9em;
+    font-family: sans-serif;
+    border: 1px solid navy;
+    width:fit-content;
+}
+
+

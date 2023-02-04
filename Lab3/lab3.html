@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="lab3.css" />
 </head>
 <body>
     <script>        
@@ -23,14 +25,77 @@
         d3.csv('cereal.csv', rowConverter).then(function(data){
             console.log(data)
             //Group the cereals by manufacturers
-            
+            let manuGrouped = {};
+            for (let cereal of data){
+                if(!manuGrouped[cereal.Manufacturer]){
+                    manuGrouped[cereal.Manufacturer] = [JSON.stringify(cereal.Name)];
+                }
+                manuGrouped[cereal.Manufacturer].push(JSON.stringify(cereal.Name));
+            }
+            console.log(manuGrouped)
+            for (var manu in manuGrouped) {
+                manuGrouped[manu] = [...new Set(manuGrouped[manu])];
+                }
+
+            console.log(manuGrouped);
             //Get the sum of carbo per manufacturer per year
-            
+            let carbManuYear = {};
+            for (let cereal of data){
+                if(!carbManuYear[cereal.Year]){
+                    let carbManu = {};
+                    carbManu[cereal.Manufacturer]=cereal.Carbo;
+                    carbManuYear[cereal.Year] = carbManu;
+                }
+                if(!carbManuYear[cereal.Year][cereal.Manufacturer]){
+                    let carbManu = carbManuYear[cereal.Year];
+                    carbManu[cereal.Manufacturer] = cereal.Carbo;
+                    carbManuYear[cereal.Year] = carbManu;
+                }
+                let carbManu = carbManuYear[cereal.Year];
+                carbManu[cereal.Manufacturer]+=cereal.Carbo;
+                carbManuYear[cereal.Year]= carbManu;
+            };
+            console.log(carbManuYear);
+
             // Find the sum of calories for manufacturer “K” in 2020? 
+            let manuCal = {};
+            for (let cereal of data){
+                if (cereal.Year==2020){
+                    if(!manuCal[cereal.Manufacturer]){
+                        manuCal[cereal.Manufacturer] = cereal.Calories;
+                    }
+                    manuCal[cereal.Manufacturer]+= cereal.Calories;
+            }};
+            console.log(manuCal);
+            console.log(manuCal["K"])
+
+            var manuGroupedTable = document.getElementById("manuGrouped");
+            var html = "<tr><th>Manufacturer</th><th>Cereals</th></tr>";
+  
+            for (var manu in manuGrouped) {
+                html += "<tr><td>" + manu + "</td><td>" + manuGrouped[manu] + "</td></tr>";
+            }
+            manuGroupedTable.innerHTML = html;
+
+            var carbManuYearTable = document.getElementById("carbManuYear");
+            var html = "<tr><th>Year</th><th></th></tr>";
+  
+            for (var year in carbManuYear) {
+                var table = "<table class=center><tr><th></th><th>Total Calories by Manufacturer</th></tr></table>";
+                for (var manu in carbManuYear[year]){
+                    table+="<tr><td>" + manu + "</td><td><b>"+ carbManuYear[year][manu]+"</b></td></tr>";
+                };
+                html += "<tr><td><b>" + year + "</b></td><td>"+table+"</td></tr>";
+            }
+            carbManuYearTable.innerHTML = html;
+
+            document.getElementById("K2020").innerHTML = "Manufacturer K Total Calories: "+"<b>"+manuCal["K"]+"</b>";
         });
-        
-       
-        
     </script>
 </body>
+    <table id="manuGrouped">
+    </table>
+    <table class="cmy" id="carbManuYear">
+    </table>
+    <p id="K2020"></p>
 </html>
