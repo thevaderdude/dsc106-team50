@@ -46,14 +46,20 @@
             // drawing the barplot, without dynamic scaling for now (slide 1)
             // we will integrate dynamic scaling in slide 2
 
+			padding = 3
+
+			xScale = d3.scaleBand().domain(r.keys()).range([0, svgwidth]).paddingInner(0.1)
+			yScale = d3.scaleLinear().domain([0, d3.max(r.values())]).range([svgheight - padding, padding])
+
+			
             svg.selectAll('.bara1')
             .data(r)
             .enter()
             .append('rect')
-            .attr('x', (d,i)=> i*35)
-            .attr('y', d => svgheight - d[1]*10)
-            .attr('width', 30)
-            .attr('height', d => d[1]*10);
+            .attr('x', (d,i)=> xScale(d[0]))
+            .attr('y', d => yScale(d[1]))
+            .attr('width', d => xScale.bandwidth())
+            .attr('height', d => svgheight - yScale(d[1]));
 			
 
 
