@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<title>Lab 4 Material</title>
+</head>
+
+<body>
+	<div id="activity1">
+		<p>Activity Generate a barplot and Add dynamic scaling</p>
+	</div>
+
+
+	<script type="text/javascript">
+
+		// Load cereal.csv to a const variable cereals
+		let rowConverter = function (d) {
+			return {
+				Name: d.Name,
+				Manufacturer: d.Manufacturer,
+				Calories: parseFloat(d.Calories),
+				Carbo: parseFloat(d.Carbo),
+				Year: +d.Year
+			};
+		}
+
+		const cereals = d3.csv("cereal.csv", rowConverter);
+
+
+		cereals.then(function (data) {
+			console.log(data);
+
+            let svgwidth = 300;
+			let svgheight = 300;
+			            
+            var svg = d3.select("#activity1").append("svg")
+				.attr("width", svgwidth)
+				.attr("height", svgheight)
+            
+			
+            // calculate the number of cereals for each manufacturer
+            r = d3.rollup(data, v => v.length, d => d.Manufacturer)
+            // drawing the barplot, without dynamic scaling for now (slide 1)
+            // we will integrate dynamic scaling in slide 2
+
+			padding = 3
+
+			xScale = d3.scaleBand().domain(r.keys()).range([0, svgwidth]).paddingInner(0.1)
+			yScale = d3.scaleLinear().domain([0, d3.max(r.values())]).range([svgheight - padding, padding])
+
+			
+            svg.selectAll('.bara1')
+            .data(r)
+            .enter()
+            .append('rect')
+            .attr('x', (d,i)=> xScale(d[0]))
+            .attr('y', d => yScale(d[1]))
+            .attr('width', d => xScale.bandwidth())
+            .attr('height', d => svgheight - yScale(d[1]));
+			
+
+
+		})
+
+	</script>
+
+</body>
+
+</html>
