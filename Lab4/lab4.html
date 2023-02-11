@@ -77,7 +77,10 @@
 			
 			var bruh = d3.select("#activity1").append("svg")
 					.attr("width", svgwidth)
-					.attr("height", svgheight/3);
+					.attr("height", svgheight/3)
+					.attr("x",0)
+					.attr("y",svgheight+20)
+
 			
 			bruh.selectAll('.bruh')
 				.data(r)
