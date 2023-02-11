@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <script>        
+        //Define your rowConverter function
+        var rowConverter = function(d){
+           return {
+            Name: d.Name,
+            Manufacturer: d.Manufacturer,
+            Calories: parseInt(d.Calories),
+            Carbo: parseFloat(d.Carbo),
+            Year: parseInt(d.Year)
+           }
+        }
+
+            /* Draw scatterplot with Calories and Carbo */
+        const cereals = d3.csv("cereal.csv", rowConverter);
+        cereals.then(function(data) {
+        let svgwidth = 300;
+        let svgheight = 300;
+    
+        let svg = d3.select("body").append("svg")
+            .attr("width", svgwidth)
+            .attr("height", svgheight);
+
+let ordinalScale = d3.scaleOrdinal()
+                    .domain(d3.map(data, function(d){return d.Manufacturer;})
+                    .keys()).range(d3.schemePaired);
+        // Question 2-1: add your code below to draw a scatterplot
+        var paddingtonBear = 5;
+        
+
+        let scaleLinearX = d3.scaleLinear()
+        .domain([d3.min(data, d => d.Calories),d3.max(data, d => d.Calories)])
+        .range([paddingtonBear, svgwidth-paddingtonBear]);
+
+        let scaleLinearY = d3.scaleLinear()
+        .domain([d3.max(data, d => d.Carbo),d3.min(data, d => d.Carbo)])
+        .range([paddingtonBear, svgheight-paddingtonBear]);
+
+
+        svg.selectAll(".circlea1").data(data).enter().append("circle").attr("cx", d => scaleLinearX(d.Calories)).attr("cy",d => scaleLinearY(d.Carbo)).attr("r","3px").attr("opacity","0.5").attr("fill", d => ordinalScale(d.Manufacturer));
+
+        svg.selectAll(".dumb").data(data)
+            .enter()
+            .append("text")
+            .attr("class", "dumb")
+            .attr("x", d => scaleLinearX(d.Calories))
+            .attr("y", d => scaleLinearY(d.Carbo)+paddingtonBear)
+            .text(d => d.Name)
+            .attr("font-size","5px")
+
+});
+
+    </script>
+</body>
+    <table id="manuGrouped">
+    </table>
+    <table class="cmy" id="carbManuYear">
+    </table>
+    <p id="K2020"></p>
+</html>
