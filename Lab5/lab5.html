@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+    <div class="stream"> </div>
+    <script>
+        // set the dimensions and margins of the graph
+        let width = 500
+        let height = 420
+        let margin = { top: 20, right: 30, bottom: 30, left: 40 }
+        // append the svg object to the div "stream" of the page
+        var svg = d3.select(".stream").append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+        // Load the Data
+        babynames = d3.csv("babynames.csv")
+        babynames.then(function (data){
+
+            var keys = Object.keys(data[0]).slice(1)
+
+            //define scaling
+            var xScale = d3.scaleLinear()
+                .domain(d3.extent(data, function (d) { return +d.year }))
+                .range([0, width])
+            var yScale = d3.scaleLinear()
+                .domain([0, d3.max(data, function (d) { return +d3.sum(keys, k => +d[k]) })])
+                .range([height, 0])
+
+            var colors = d3.scaleOrdinal()
+                .domain(keys)
+                .range(d3.schemeCategory10)
+
+            //Stack the data
+            var stacked  = d3.stack()
+                .keys(keys)
+                .offset(d3.stackOffsetWiggle)
+                (data)
+
+            // Generate streamgraph
+            var area = d3.area()
+                .x(function (d) { return xScale(d.data.year) })
+                .y0(function (d) { return yScale(d[0]) })
+                .y1(function (d) { return yScale(d[1]) })
+
+            svg.selectAll("path")
+                .data(stacked)
+                .enter().append("path")
+                .attr("d", area)
+                .style("fill", function (d) { return colors(d.key) })
+
+            svg.append("g")
+                .attr("transform", "translate(0," + height + ")")
+                .call(d3.axisBottom(xScale))
+
+            svg.append("g")
+                .call(d3.axisLeft(yScale))
+        })
+    </script>
+</body>
+
+</html>
