@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+    <title>World Map</title>
+</head>
+
+<body>
+    <div id="us">
+    </div>
+    <div id="world">
+    </div>
+    <script>
+        var width = 700;
+        var height = 600;
+
+        //---------------------------USA ---------------------
+        var svg1 = d3.select("#us")
+            .append("svg").attr("width", width).
+            attr("height", height);
+        //TO DO: Create projection and pathgeo variables for US
+        const projection1  = d3.geoAlbersUsa().scale(800).translate([width/2, height/2]) //chain translate and scale
+        const pathgeo1 = d3.geoPath().projection(projection1)
+        //TO DO: Load JSON file and create the map
+        const statesmap = d3.json('us-states.json')
+
+        statesmap.then(function(map){
+            svg1.selectAll('path').data(map.features)
+            .enter()
+            .append('path')
+            .attr('d',pathgeo1)
+
+
+
+        })
+
+
+
+        
+
+        // -----------------WORLD------------------------------
+        //TO DO: Create projection and pathgeo variables for world
+        const projection2  = null
+        const pathgeo2 = null
+        var svg2 = d3.select("#world")
+            .append("svg").attr("width", width).
+            attr("height", height);
+        //base sphere for the world map
+        svg2.append('path')
+            .attr('class', 'sphere')
+            .attr('d', pathgeo2({ type: 'Sphere' }))
+
+      //TO DO: Load JSON file and create the map
+
+
+    </script>
+</body>
+
+</html>
