@@ -74,7 +74,7 @@
 				.attr('height', d => svgheight - yScale(d[1]))
 				.attr('fill', (d,i)=>rCol[i]);
 
-			
+			d3.select("#activity1").append("br")
 			var bruh = d3.select("#activity1").append("svg")
 					.attr("width", svgwidth)
 					.attr("height", svgheight/3)

@@ -7,6 +7,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-array@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-geo@3"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3-geo-projection@4"></script>
     <title>World Map</title>
 </head>
 
@@ -45,17 +48,29 @@
 
         // -----------------WORLD------------------------------
         //TO DO: Create projection and pathgeo variables for world
-        const projection2  = null
-        const pathgeo2 = null
+        const projection2  = d3.geoAzimuthalEquidistant().scale(100).translate([width/2, height/2])
+        const pathgeo2 = d3.geoPath().projection(projection2)
         var svg2 = d3.select("#world")
             .append("svg").attr("width", width).
             attr("height", height);
         //base sphere for the world map
         svg2.append('path')
             .attr('class', 'sphere')
-            .attr('d', pathgeo2({ type: 'Sphere' }))
+            .attr('d', pathgeo2({ type: 'Sphere' })).attr('fill', 'blue')
 
       //TO DO: Load JSON file and create the map
+      const worldmap = d3.json('world.json')
+
+      worldmap.then(function(map) {
+        const countries = topojson.feature(map, map.objects.countries)
+
+
+        svg2.selectAll('path').data(countries.features).enter().append('path')
+        .attr('d', pathgeo2).attr('fill', 'green')
+      })
+
+
+      
 
 
     </script>
