@@ -1,0 +1,130 @@
+<html>
+
+<head>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+
+<body>
+        <div>
+            <div id="radio" class="center_plot">
+                <input type="radio" id="q1_2011" name="year" value="2011" checked="checked">
+                <label for="2011">2011</label>
+                <input type="radio" id="q1_2012" name="year" value="2012">
+                <label for="2012">2012</label>
+                <input type="radio" id="q1_2013" name="year" value="2013">
+                <label for="2013">2013</label>
+            </div>
+            <div id="q1_plot" class="center_plot">
+            </div>
+        </div>
+    
+
+
+        <script>
+            var width = 1000;
+            var height = 800;
+            var margin = {
+                top: 50, bottom: 50, left: 50, right: 50
+            }
+            //reading data
+            current_year = 2011;
+            var year_data = {
+                2011: [{ Sale: 'JP_Sales', val: 53 }, { Sale: 'Other_Sales', val: 33 }
+                    , { Sale: 'NA_Sales', val: 23 }, { Sale: 'EU_Sales', val: 43 }], 
+                2012: [{ Sale: 'JP_Sales', val: 22 }, { Sale: 'Other_Sales', val: 33 }
+                        , { Sale: 'NA_Sales', val: 53 }, { Sale: 'EU_Sales', val: 17 }],
+                2013: [{ Sale: 'JP_Sales', val: 52 }, { Sale: 'Other_Sales', val: 20 }
+                    , { Sale: 'NA_Sales', val: 15 }, { Sale: 'EU_Sales', val: 11 }]
+            }
+
+            cols = ["JP_Sales", "NA_Sales", "EU_Sales", "Other_Sales"]
+
+            console.log(year_data)
+            var c_data = year_data[current_year];
+            //        Creating bar plot
+            const svg = d3.select("#q1_plot")
+                .append("svg")
+                .attr("width", width - margin.right - margin.left)
+                .attr("height", height - margin.top - margin.bottom)
+                .attr("viewBox", [0, 0, width, height]);
+            var xScale = d3.scaleBand()
+                .domain(cols)
+                .range([margin.left, width - margin.right])
+                .padding(0.1);
+            var yScale = d3.scaleLinear()
+                .domain([0, d3.max(c_data, function (d) {
+                    return d.val
+                })])
+                .range([height - margin.bottom, margin.top]);
+            var x_axis = d3.axisBottom(xScale)
+            var y_axis = d3.axisLeft(yScale);
+            svg.append("g")
+                .attr('transform', `translate(${margin.left},0)`)
+                .attr("class","y_axis")
+                .call(y_axis)
+                .append("text")
+                .attr("dx", "-.1em")
+                .attr("dy", "0.71em")
+                .attr("text-anchor", "end")
+            svg.append('g')
+                .attr('transform', `translate(0,${height - margin.bottom})`)
+                .call(x_axis)
+                .selectAll("text")
+                .style("text-anchor", "end")
+                .attr("dx", "-.8em")
+                .attr("dy", ".15em")
+                .attr("transform", function (d) {
+                    return "rotate(-30)";
+                });
+
+            var Tooltip = d3.select("#q1_plot").append("div").style("opacity", 0).attr("class", "tooltip");
+            svg.append('g')
+                .selectAll('rect')
+                .data(year_data[current_year])
+                .enter()
+                .append('rect')
+                .attr('fill', 'red')
+                .attr('x', (d, i) => xScale(d.Sale))
+                .attr('y', (d, i) => yScale(d.val))
+                .attr('height', d => yScale(0) - yScale(d.val))
+                .attr('width', xScale.bandwidth())
+                // .on("mouseover", function (e, d) {
+                //             Tooltip.transition().duration(50).style("opacity", 0.9);
+                //             //create method chain for tooltip
+                           
+                //         })
+                // .on("mousemove", function (e, d) {
+                //             //create method chain for tooltip
+                //         })
+                // .on("mouseout", function (e, d) {
+                //             //create method chain for tooltip
+                           
+                //         });
+            var radio = d3.select('#radio')
+                .attr('name', 'year').on("change", function (d) {
+                    current_year = d.target.value; //getting the value of selected radio button
+                    c_data = year_data[current_year]; //filtering for current year
+                    //we only change y axis
+                    //TO DO : Complete the below definitions
+                    yScale = d3.scaleLinear().domain([0, d3.max(c_data,d => d.val)])
+                    .range([height - margin.bottom, margin.top]);;
+                    y_axis = d3.axisLeft(yScale);
+                    d3.selectAll("g.y_axis")
+                        .transition(500)
+                        .call(y_axis)
+                        .attr("dx", "-.1em")
+                        .attr("dy", "0.71em")
+                        .attr("text-anchor", "end")
+                    //TO DO: Complete call for y_axis
+                    d3.selectAll("rect").data(c_data).transition(500)
+                    .attr('y', (d, i) => yScale(d.val))
+                    .attr('height', d => yScale(0) - yScale(d.val))
+                    
+                    //TO DO: Complete method chain to change data of rectangles
+                       })
+
+        </script>
+</body>
+
+</html>
