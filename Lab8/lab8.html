@@ -78,7 +78,7 @@
                     return "rotate(-30)";
                 });
 
-            var Tooltip = d3.select("#q1_plot").append("div").style("opacity", 0).attr("class", "tooltip");
+            var Tooltip = d3.select("#q1_plot").append("div").style("opacity", 0.9).attr("class", "tooltip");
             svg.append('g')
                 .selectAll('rect')
                 .data(year_data[current_year])
@@ -89,18 +89,20 @@
                 .attr('y', (d, i) => yScale(d.val))
                 .attr('height', d => yScale(0) - yScale(d.val))
                 .attr('width', xScale.bandwidth())
-                // .on("mouseover", function (e, d) {
-                //             Tooltip.transition().duration(50).style("opacity", 0.9);
-                //             //create method chain for tooltip
+                .on("mouseover", function (e, d) {
+                            Tooltip.transition().duration(50).style("opacity", 0.9);
+                            //create method chain for tooltip
                            
-                //         })
-                // .on("mousemove", function (e, d) {
-                //             //create method chain for tooltip
-                //         })
-                // .on("mouseout", function (e, d) {
-                //             //create method chain for tooltip
+                        })
+                .on("mousemove", function (e, d) {
+                    Tooltip.html(`Value: ${d.val}`)
+                        .style("left", (e.pageX + 10) + "px")
+                        .style("top", (e.pageY - 10) + "px"); 
+                                    })
+                .on("mouseout", function (e, d) {
+                    Tooltip.transition().duration(50).style("opacity", 0);
                            
-                //         });
+                        });
             var radio = d3.select('#radio')
                 .attr('name', 'year').on("change", function (d) {
                     current_year = d.target.value; //getting the value of selected radio button
